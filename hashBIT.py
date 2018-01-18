@@ -51,7 +51,7 @@ async def info():
         				\n**hashBIT Bot ID**: {}\
         				\n**hashBIT Connected Servers**: {}\
         				\
-        				\n\n*Cryptocurrency data is retreived from cryptocompare.com*\
+        				\n\n*Cryptocurrency data is retrieved from cryptocompare.com*\
         				\n*Bot created and run by Fuzzy ({})*'.format(version, discord.__version__, application_info.name, application_info.id, serverCount, application_info.owner, ))
 
     except Exception as e:
