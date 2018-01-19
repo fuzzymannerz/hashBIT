@@ -2,15 +2,36 @@
     hashBIT Discord Bot
     [Returns cryptocurrency rates]
     by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml
-	https://github.com/fuzzymannerz/hashBIT
+    https://github.com/fuzzymannerz/hashBIT
 '''
-version = "0.1 beta"
+version = "0.1.1 beta"
 
-import discord, requests, json
+import discord, requests, json, time
 from discord.ext import commands
 
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
 bot = commands.Bot(command_prefix='#', description=description)
+
+# Bot uptime stats
+startTime = time.time()
+
+def formatTime(seconds):
+    seconds = int(seconds)
+    days, seconds = divmod(seconds, 86400)
+    hours, seconds = divmod(seconds, 3600)
+    minutes, seconds = divmod(seconds, 60)
+    if days > 0:
+        return '%dd %dh %dm %ds' % (days, hours, minutes, seconds)
+    elif hours > 0:
+        return '%dh %dm %ds' % (hours, minutes, seconds)
+    elif minutes > 0:
+        return '%dm %ds' % (minutes, seconds)
+    else:
+        return '%ds' % (seconds,)
+
+def upTime():
+    return formatTime(time.time() - startTime)
+
 
 # Set some variables
 genericError = 'There has been an error. 😞 Please try again later or raise an issue on GitHub (fuzzymannerz/hashBIT) for help including the following message:'
@@ -43,16 +64,17 @@ async def info():
     try:
         application_info = await bot.application_info()
         serverCount = len(bot.servers)
+        uptime = upTime()
 
         await bot.say('\n**Bot Information**\n\
-        				\n**hashBIT Version**: {}\
-        				\n**Discord Version**: {}\
-        				\n**hashBIT Bot Username**: {}\
-        				\n**hashBIT Bot ID**: {}\
-        				\n**hashBIT Connected Servers**: {}\
-        				\
-        				\n\n*Cryptocurrency data is retrieved from cryptocompare.com*\
-        				\n*Bot created and run by Fuzzy ({})*'.format(version, discord.__version__, application_info.name, application_info.id, serverCount, application_info.owner, ))
+                        \n**hashBIT Version**: {}\
+                        \n**Discord Version**: {}\
+                        \n**hashBIT Bot Username**: {}\
+                        \n**hashBIT Bot ID**: {}\
+                        \n**hashBIT Connected Servers**: {}\
+                        \n**hashBIT Uptime**: {}\
+                        \
+                        \n\n*Bot created and run by Fuzzy ({})*'.format(version, discord.__version__, application_info.name, application_info.id, serverCount, uptime, application_info.owner, ))
 
     except Exception as e:
         await bot.say(genericError)
@@ -64,10 +86,10 @@ async def info():
 async def help():
     try:
         await bot.say('\n**Help**\n\
-        				\nCurrent rate of a coin: `#bit rate [coin abbreviation]` eg. `#bit rate btc` or `#bit rate eth`\
-        				\nShow this help text: `#bit help` \
-        				\nShow bot invite URL: `#bit invite` \
-        				\nView information about this bot: `#bit info`')
+                        \nCurrent rate of a coin: `#bit rate [coin abbreviation]` eg. `#bit rate btc` or `#bit rate eth`\
+                        \nShow this help text: `#bit help` \
+                        \nShow bot invite URL: `#bit invite` \
+                        \nView information about this bot: `#bit info`')
     except Exception as e:
         await bot.say(genericError)
         await bot.say(e)
@@ -78,8 +100,8 @@ async def help():
 async def invite():
     try:
         await bot.say('\n**Invite URL**\n\
-        				\nInvite the bot to another server with this URL:\
-        				\nhttps://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
+                        \nInvite the bot to another server with this URL:\
+                        \nhttps://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
     except Exception as e:
         await bot.say(genericError)
         await bot.say(e)
