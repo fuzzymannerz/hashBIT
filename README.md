@@ -4,7 +4,7 @@
 A cryptocurrency rate Discord bot.
 
 ## Invite To Server
-https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=8
+[https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=8](https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=8)
 
 ## Commands
 The following commands are currently available:    
@@ -20,9 +20,14 @@ View information about the bot: `#bit info`
 
 ### Requirements    
 - Python 3
-- discord.py library (https://github.com/Rapptz/discord.py)
+- discord.py library [(https://github.com/Rapptz/discord.py)](https://github.com/Rapptz/discord.py)
+- A Discord app & token
 
 ### Usage
+1. Register an app on the Discord developer page. [https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me)
+2. Make the app into a user and copy the token into the end of the code.
+3. Save and run it
+
 On Linux you can run the following to open the script as a background process:
 ```
 pnohup python3 hashBIT.py &
