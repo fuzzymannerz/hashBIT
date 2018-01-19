@@ -105,5 +105,5 @@ async def rate_handler(ctx, error):
     await bot.say("Rate command format is `#bit rate [coin abbreviation]` eg. `#bit rate btc` or `#bit rate eth`. See `#bit help` for other commands.")
 
 
-# Run the bot using token from Discord developer app page
+# Run the bot using token from Discord developer app page (The token below is invalid and just an example)
 bot.run('NDAzMzY2Nzk5MjY3MzMyMDk3.DUGQgg.5aqah8cKs3tC5J8TV7Dv-C_xErc')
