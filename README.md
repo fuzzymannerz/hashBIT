@@ -25,7 +25,8 @@ View information about the bot: `#bit info`
 ### Usage
 On Linux you can run the following to open the script as a background process:
 ```
-pnohup python3 hashBIT.py & && disown
+pnohup python3 hashBIT.py &
+disown
 ```
 
 ----------
