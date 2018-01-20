@@ -30,7 +30,6 @@ profileImage = 'https://raw.githubusercontent.com/fuzzymannerz/hashBIT/master/ha
 # Get the current time
 currentTime = time.strftime("%H:%M", time.gmtime())
 
-
 # Bot uptime stats
 startTime = time.time()
 
@@ -50,7 +49,6 @@ def formatTime(seconds):
 
 def upTime():
     return formatTime(time.time() - startTime)
-
 
 # Print login information to the server console
 @bot.event
@@ -76,8 +74,6 @@ async def bit(cmd):
 @bit.command()
 async def info():
     try:
-
-
         application_info = await bot.application_info()
         serverCount = len(bot.servers)
         uptime = upTime()
@@ -110,7 +106,6 @@ async def info():
 @bit.command()
 async def help():
     try:
-
         e = discord.Embed(colour=0xffd400)
         e.set_footer(text=embedFooter)
 
@@ -133,7 +128,6 @@ async def help():
 @bit.command()
 async def invite():
     try:
-
         e = discord.Embed(colour=0xffd400, url='https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
         e.set_footer(text=embedFooter)
 
@@ -142,7 +136,6 @@ async def invite():
 
         e.add_field(name='Invite Link', value='You can invite hashBIT to another server using the following URL:\n \
                                              **https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8**'.format(bot.user.id))
-
         await bot.say(embed=e)
 
     except Exception as e:
@@ -154,7 +147,6 @@ async def invite():
 @bit.command()
 async def rate(coin : str):
     try:
-
         coin = coin.upper()
         api = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=EUR,GBP,USD".format(coin))
         apidata = api.json()
