@@ -174,19 +174,6 @@ async def rate(coin : str):
         await bot.say(rateError)
         return
 
-# # Send user a PM
-@bit.command(pass_context=True)
-async def pm(ctx, message):
-    try:
-        await bot.say('Hey {}! Check your PMs!'.format(message.author))
-        #await bot.send_message(username, content="This is a private message!")
-
-    except Exception as e:
-        await bot.say(genericError)
-        await bot.say(e)
-        return
-
-
 # Deal with mentions and PMs to the bot
 @bot.event
 async def on_message(message):
