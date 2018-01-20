@@ -41,7 +41,7 @@ rateError = 'There was an error getting the rates. 😞 Please check that you ha
 embedFooter = 'hashBIT v{}. | {}bit help to view commands.'.format(version, cmdPrefix)
 
 # Set links for the info section
-botlistLink = 'https://discordbots.org/bot/403366799267332097s'
+botlistLink = 'https://discordbots.org/bot/403366799267332097'
 githubLink = 'https://github.com/fuzzymannerz/hashBIT'
 profileImage = 'https://raw.githubusercontent.com/fuzzymannerz/hashBIT/master/hashbit_profile.png'
 
