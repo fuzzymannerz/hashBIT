@@ -23,6 +23,7 @@ View information about the bot: `#bit info`
 ### Requirements    
 - Python 3
 - discord.py library [(https://github.com/Rapptz/discord.py)](https://github.com/Rapptz/discord.py)
+- requests library [http://python-requests.org](http://python-requests.org)
 - A Discord app & token
 
 ### Usage
