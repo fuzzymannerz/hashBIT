@@ -1,5 +1,7 @@
 ![](https://i.imgur.com/CNfAtAK.png)
 
+[![Discord Bots](https://discordbots.org/api/widget/status/403366799267332097.svg?noavatar=true)](https://discordbots.org/bot/403366799267332097) [![Discord Bots](https://discordbots.org/api/widget/lib/403366799267332097.svg?noavatar=true)](https://discordbots.org/bot/403366799267332097) [![Discord Bots](https://discordbots.org/api/widget/owner/403366799267332097.svg?noavatar=true)](https://discordbots.org/bot/403366799267332097)
+
 # hashBIT
 A cryptocurrency rate Discord bot.
 
