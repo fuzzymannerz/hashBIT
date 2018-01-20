@@ -12,8 +12,6 @@ from discord.ext import commands
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
 
 cmdPrefix = '#'  # Set the prefix for commands. Default is "#" - hence the name.
-
-# CHANGE THE "-" BELOW TO A "#" WHEN CHANGING TO PRODUCTION SCRIPT
 bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
 # Bot uptime stats
