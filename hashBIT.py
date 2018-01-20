@@ -4,13 +4,17 @@
     by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml
     https://github.com/fuzzymannerz/hashBIT
 '''
-version = "0.1.1 beta"
+version = "0.5"
 
-import discord, requests, json, time
+import discord, requests, time
 from discord.ext import commands
 
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
-bot = commands.Bot(command_prefix='#', description=description)
+
+cmdPrefix = '-'  # Set the prefix for commands. Default is "#" - hence the name.
+
+# CHANGE THE "-" BELOW TO A "#" WHEN CHANGING TO PRODUCTION SCRIPT
+bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
 # Bot uptime stats
 startTime = time.time()
@@ -35,7 +39,16 @@ def upTime():
 
 # Set some variables
 genericError = 'There has been an error. 😞 Please try again later or raise an issue on GitHub (fuzzymannerz/hashBIT) for help including the following message:'
-rateError = 'There was an error getting the rates. 😞 Please check that you have used a valid coin abbreviation. Try `#bit help` to view available commands.'
+rateError = 'There was an error getting the rates. 😞 Please check that you have used a valid coin abbreviation. Try `{}bit help` to view available commands.'.format(cmdPrefix)
+embedFooter = 'hashBIT v{}. | {}bit help to view commands.'.format(version, cmdPrefix)
+
+# Set links for the info section
+botlistLink = 'https://discordbots.org/bot/403366799267332097s'
+githubLink = 'https://github.com/fuzzymannerz/hashBIT'
+profileImage = 'https://raw.githubusercontent.com/fuzzymannerz/hashBIT/master/hashbit_profile.png'
+
+# Get the current time
+currentTime = time.strftime("%H:%M", time.gmtime())
 
 @bot.event
 async def on_ready():
@@ -47,7 +60,7 @@ async def on_ready():
     print('-------------------------------------------------------------------------------------------------')
 
     # Set the "playing" text
-    await bot.change_presence(game=discord.Game(name='#bit help'))
+    await bot.change_presence(game=discord.Game(name='{}bit help'.format(cmdPrefix)))
 
 # Remove default help command
 bot.remove_command('help')
@@ -56,7 +69,7 @@ bot.remove_command('help')
 @bot.group(pass_context=True)
 async def bit(cmd):
     if cmd.invoked_subcommand is None:
-        await bot.say('That didn\'t work. 😞 Try `#bit help` to see available commands.')
+        await bot.say('That didn\'t work. 😞 Try `{}bit help` to see available commands.'.format(cmdPrefix))
 
 # Info command
 @bit.command()
@@ -66,16 +79,24 @@ async def info():
         serverCount = len(bot.servers)
         uptime = upTime()
 
-        await bot.say('\n**Bot Information**\n\
-                        \n**hashBIT Version**: {}\
-                        \n**Discord Version**: {}\
-                        \n**hashBIT Bot Username**: {}\
-                        \n**hashBIT Bot ID**: {}\
-                        \n**hashBIT Connected Servers**: {}\
-                        \n**hashBIT Uptime**: {}\
-                        \
-                        \n\n*Bot created and run by Fuzzy ({})*\
-                        \nRate data provided by cryptocompare.com'.format(version, discord.__version__, application_info.name, application_info.id, serverCount, uptime, application_info.owner, )
+        e = discord.Embed(title='Bot Information', colour=0xffd400)
+
+        e.set_footer(text='{} | Rate data provided by cryptocompare.com'.format(embedFooter))
+
+        e.set_thumbnail(url=profileImage)
+
+        e.add_field(name='hashBit Version', value=version)
+        e.add_field(name='Discord Version', value=discord.__version__)
+        e.add_field(name='hashBIT Bot Username', value=application_info.name)
+        e.add_field(name='hashBIT Bot ID', value=application_info.id)
+        e.add_field(name='Connected Servers', value=str(serverCount))
+        e.add_field(name='hashBIT Uptime', value=uptime)
+
+        e.add_field(name='\u200b', value='\u200b') # Create a blank line
+
+        e.add_field(name='About hashBIT', value='**hashBIT v{} - Created by fuzzy#8620**. {} {}'.format(version, botlistLink, githubLink))
+
+        await bot.say(embed=e)
 
     except Exception as e:
         await bot.say(genericError)
@@ -86,11 +107,20 @@ async def info():
 @bit.command()
 async def help():
     try:
-        await bot.say('\n**Help**\n\
-                        \nCurrent rate of a coin: `#bit rate [coin abbreviation]` eg. `#bit rate btc` or `#bit rate eth`\
-                        \nShow this help text: `#bit help` \
-                        \nShow bot invite URL: `#bit invite` \
-                        \nView information about this bot: `#bit info`')
+
+        e = discord.Embed(colour=0xffd400)
+        e.set_footer(text=embedFooter)
+
+        e.set_author(name='hashBIT Help', icon_url=profileImage)
+        e.set_thumbnail(url=profileImage)
+
+        e.add_field(name='Get a coin rate', value='```{}bit rate [btc|eth|men|xrp etc...]```'.format(cmdPrefix))
+        e.add_field(name='Show the help text', value='```{}bit help```'.format(cmdPrefix), inline=False)
+        e.add_field(name='Show bot invite URL', value='```{}bit invite```'.format(cmdPrefix), inline=False)
+        e.add_field(name='View bot information', value='```{}bit info```'.format(cmdPrefix), inline=False)
+
+        await bot.say(embed=e)
+
     except Exception as e:
         await bot.say(genericError)
         await bot.say(e)
@@ -100,9 +130,18 @@ async def help():
 @bit.command()
 async def invite():
     try:
-        await bot.say('\n**Invite URL**\n\
-                        \nInvite the bot to another server with this URL:\
-                        \nhttps://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
+
+        e = discord.Embed(colour=0xffd400, url='https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
+        e.set_footer(text=embedFooter)
+
+        e.set_author(name='hashBIT Invite URL', icon_url=profileImage)
+        e.set_thumbnail(url=profileImage)
+
+        e.add_field(name='Invite Link', value='You can invite hashBIT to another server using the following URL:\n \
+                                             **https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8**'.format(bot.user.id))
+
+        await bot.say(embed=e)
+
     except Exception as e:
         await bot.say(genericError)
         await bot.say(e)
@@ -116,16 +155,41 @@ async def rate(coin : str):
         api = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=EUR,GBP,USD".format(coin))
         apidata = api.json()
 
-        await bot.say('**1 {}** = €{} / £{} / ${} (USD)'.format(coin, apidata['EUR'], apidata['GBP'], apidata['USD']))
+        e = discord.Embed(colour=0x00ff5c)
+        e.set_footer(text= embedFooter)
 
-    except (Exception):
-        await bot.say(rateError)
+        e.set_author(name='hashBIT {} Rate'.format(coin), icon_url=profileImage)
+
+        e.add_field(name='💶 Euros', value='**€{}**'.format(apidata['EUR']))
+        e.add_field(name='💷 Pound Sterling', value='**£{}**'.format(apidata['GBP']))
+        e.add_field(name='💵 US Dollars', value='**${}**'.format(apidata['USD']))
+
+        await bot.say(embed=e)
+
+    except Exception as ex:
+        if api.status_code != "200":
+            await bot.say ("**There was an error on the other end that is out of hashBIT's control. Please try again later.**")
+            await bot.say("**Returned error:** {}".format(ex))
+        else:
+            await bot.say(rateError)
         return
+
+# # Send user a PM
+# @bit.command(pass_context=True)
+# async def pm(user : discord.Message.author):
+#     print (user)
+#     try:
+#         await bot.message('Hey {}! Check your PMs!'.format(user))
+#         #await bot.send_message(username, content="This is a private message!")
+#
+#     except (Exception):
+#         await bot.say(genericError)
+#         return
 
 # If there is an error of no argument in "#bit rate [arg]"
 @rate.error
-async def rate_handler(ctx, error): 
-    await bot.say("Rate command format is `#bit rate [coin abbreviation]` eg. `#bit rate btc` or `#bit rate eth`. See `#bit help` for other commands.")
+async def rate_handler():
+    await bot.say("Rate command format is `{}bit rate [btc|eth|men|xrp etc...]` See `{}bit help` for other commands.".format(cmdPrefix, cmdPrefix))
 
 
 # Run the bot using token from Discord developer app page (The token below is invalid and just an example)
