@@ -33,6 +33,8 @@ On Linux you can run the following to open the script as a background process:
 pnohup python3 hashBIT.py &
 disown
 ```
+----------
+*Rate data provided by [cryptocompare.com](https://cryptocompare.com)*
 
 ----------
 ## Donate
