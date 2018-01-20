@@ -74,7 +74,8 @@ async def info():
                         \n**hashBIT Connected Servers**: {}\
                         \n**hashBIT Uptime**: {}\
                         \
-                        \n\n*Bot created and run by Fuzzy ({})*'.format(version, discord.__version__, application_info.name, application_info.id, serverCount, uptime, application_info.owner, ))
+                        \n\n*Bot created and run by Fuzzy ({})*\
+                        \nRate data provided by cryptocompare.com'.format(version, discord.__version__, application_info.name, application_info.id, serverCount, uptime, application_info.owner, )
 
     except Exception as e:
         await bot.say(genericError)
