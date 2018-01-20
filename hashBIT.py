@@ -11,7 +11,7 @@ from discord.ext import commands
 
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
 
-cmdPrefix = '-'  # Set the prefix for commands. Default is "#" - hence the name.
+cmdPrefix = '#'  # Set the prefix for commands. Default is "#" - hence the name.
 
 # CHANGE THE "-" BELOW TO A "#" WHEN CHANGING TO PRODUCTION SCRIPT
 bot = commands.Bot(command_prefix=cmdPrefix, description=description)
@@ -173,18 +173,6 @@ async def rate(coin : str):
         else:
             await bot.say(rateError)
         return
-
-# # Send user a PM
-# @bit.command(pass_context=True)
-# async def pm(user : discord.Message.author):
-#     print (user)
-#     try:
-#         await bot.message('Hey {}! Check your PMs!'.format(user))
-#         #await bot.send_message(username, content="This is a private message!")
-#
-#     except (Exception):
-#         await bot.say(genericError)
-#         return
 
 # If there is an error of no argument in "#bit rate [arg]"
 @rate.error
