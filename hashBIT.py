@@ -58,7 +58,7 @@ async def on_ready():
     print('\nLogged in as: [{}] | User ID: [{}] | Start time: [{}]'.format(bot.user.name, bot.user.id, currentTime))
     print('\n----------------------------------------------------------------------------------------------')
     print('Use this link to invite {} to a server:'.format(bot.user.name))
-    print('https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
+    print('https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=216129'.format(bot.user.id))
 
     # Set the "playing" text
     await bot.change_presence(game=discord.Game(name='{}bit help'.format(cmdPrefix)))
