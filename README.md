@@ -21,7 +21,7 @@ View information about the bot: `#bit info`
 ## Self Hosting
 
 ### Requirements    
-- Python 3
+- Python >= 3.4
 - discord.py library [(https://github.com/Rapptz/discord.py)](https://github.com/Rapptz/discord.py)
 - requests library [(http://python-requests.org)](http://python-requests.org)
 - A Discord app & token
