@@ -128,14 +128,14 @@ async def help():
 @bit.command()
 async def invite():
     try:
-        e = discord.Embed(colour=0xffd400, url='https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8'.format(bot.user.id))
+        e = discord.Embed(colour=0xffd400, url='https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=216129'.format(bot.user.id))
         e.set_footer(text=embedFooter)
 
         e.set_author(name='hashBIT Invite URL', icon_url=profileImage)
         e.set_thumbnail(url=profileImage)
 
         e.add_field(name='Invite Link', value='You can invite hashBIT to another server using the following URL:\n \
-                                             **https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=8**'.format(bot.user.id))
+                                             **https://discordapp.com/oauth2/authorize?client_id={}&scope=bot&permissions=216129**'.format(bot.user.id))
         await bot.say(embed=e)
 
     except Exception as e:
