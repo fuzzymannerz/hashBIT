@@ -6,7 +6,7 @@
 A cryptocurrency rate Discord bot.
 
 ## Invite To Server
-[https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=8](https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=8)
+[https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=216129](https://discordapp.com/oauth2/authorize?client_id=403366799267332097&scope=bot&permissions=216129)
 
 ## Commands
 The following commands are currently available:    
