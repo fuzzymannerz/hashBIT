@@ -6,7 +6,7 @@
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
 
-version = "0.6"
+version = "0.6.1"
 
 import discord, requests, time
 from discord.ext import commands
@@ -19,7 +19,7 @@ bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
 # Set some variables
 genericError = 'There has been an error. 😞 Please try again later or raise an issue on GitHub (fuzzymannerz/hashBIT) for help including the following message:'
-rateError = 'There was an error getting the rates. 😞 Please check that you have used a valid coin abbreviation. Try `{}bit help` to view available commands.'.format(cmdPrefix)
+rateErrorText = 'There was an error getting the rates. 😞 Please check that you have used a valid coin abbreviation. Try `{}bit help` to view available commands.'.format(cmdPrefix)
 embedFooter = 'hashBIT v{} | {}bit help to view commands.'.format(version, cmdPrefix)
 
 # Set links for the info section
@@ -68,7 +68,14 @@ bot.remove_command('help')
 @bot.group(pass_context=True)
 async def bit(cmd):
     if cmd.invoked_subcommand is None:
-        await bot.say('That didn\'t work. 😞 Try `{}bit help` to see available commands.'.format(cmdPrefix))
+
+        e = discord.Embed(colour=0xff0000)
+
+        e.set_footer(text=embedFooter)
+        e.set_author(name='ERROR', icon_url=profileImage)
+        e.add_field(name='\u200b', value='That didn\'t work. 😞\nTry `{}bit help` to see available commands.'.format(cmdPrefix))
+
+        await bot.say(embed=e)
 
 # Info command
 @bit.command()
@@ -148,23 +155,46 @@ async def invite():
 async def rate(coin : str):
     try:
         coin = coin.upper()
-        api = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=EUR,GBP,USD".format(coin))
-        apidata = api.json()
+        priceAPI = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=EUR,GBP,USD".format(coin))
+        priceData = priceAPI.json()
+
+        coinDataAPI = requests.get("https://www.cryptocompare.com/api/data/coinlist/")
+        coinData = coinDataAPI.json()
+        coinName = coinData['Data'][coin]['FullName']
+
+        coinImage =  coinData['BaseImageUrl'] + coinData['Data'][coin]['ImageUrl']
 
         e = discord.Embed(colour=0x00ff5c)
         e.set_footer(text= embedFooter)
 
-        e.set_author(name='hashBIT {} Rate'.format(coin), icon_url=profileImage)
+        if coinName and coinImage:
+            e.set_author(name='{} Rate'.format(coinName), icon_url=coinImage)
+        if coinName and not coinImage:
+            e.set_author(name='{} Rate'.format(coinName), icon_url=profileImage)
+        if coinImage and not coinName:
+            e.set_author(name='{} Rate'.format(coin), icon_url=coinImage)
+        if not coinName and not coinImage:
+            e.set_author(name='{} Rate'.format(coin), icon_url=profileImage)
 
-        e.add_field(name='💶 Euros', value='**€{}**'.format(apidata['EUR']))
-        e.add_field(name='💷 Pound Sterling', value='**£{}**'.format(apidata['GBP']))
-        e.add_field(name='💵 US Dollars', value='**${}**'.format(apidata['USD']))
+        e.add_field(name='💶 Euros', value='**€{}**'.format(priceData['EUR']))
+        e.add_field(name='💷 Pound Sterling', value='**£{}**'.format(priceData['GBP']))
+        e.add_field(name='💵 US Dollars', value='**${}**'.format(priceData['USD']))
 
         await bot.say(embed=e)
 
     except (Exception):
-        await bot.say(rateError)
+        await rateError()
         return
+
+# Rate error embed
+async def rateError():
+    e = discord.Embed(colour=0xff0000)
+
+    e.set_footer(text=embedFooter)
+    e.set_author(name='ERROR', icon_url=profileImage)
+    e.add_field(name='\u200b', value=rateErrorText)
+
+    await bot.say(embed=e)
 
 # Deal with mentions and PMs to the bot
 @bot.event
@@ -186,7 +216,15 @@ async def on_message(message):
 # If there is an error of no argument in "#bit rate [arg]"
 @rate.error
 async def rate_handler(ctx, error):
-    await bot.say("Rate command format is `{0}bit rate [coin]`\nSee `{0}bit help` for other commands and more information.".format(cmdPrefix))
+
+    e = discord.Embed(colour=0xff0000)
+
+    e.set_footer(text= embedFooter)
+    e.set_author(name='ERROR', icon_url=profileImage)
+    e.add_field(name='\u200b', value='Rate command format is `{0}bit rate [coin]`\nSee `{0}bit help` for other commands and more information.'.format(cmdPrefix))
+
+    await bot.say(embed=e)
+
 
 # Run the bot using token from Discord developer app page (The token below is invalid and just an example)
 bot.run('NDAzMzY2Nzk5MjY3MzMyMDk3.DUGQgg.5aqah8cKs3tC5J8TV7Dv-C_xErc')
