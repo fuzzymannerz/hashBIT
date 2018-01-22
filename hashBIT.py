@@ -95,10 +95,9 @@ async def bit(cmd):
 
         await bot.say(embed=e)
 
-
 # Info command
-@bit.command()
-async def info():
+@bit.command(pass_context=True)
+async def info(ctx):
     try:
         application_info = await bot.application_info()
         serverCount = len(bot.servers)
@@ -116,7 +115,10 @@ async def info():
         e.add_field(name='hashBIT Bot ID', value=application_info.id)
         e.add_field(name='Connected Servers', value=str(serverCount))
         e.add_field(name='hashBIT Uptime', value=uptime)
+        e.add_field(name='Server Owner', value=ctx.message.server.owner)
 
+        e.add_field(name='\u200b', value='\u200b')  # Create a blank line
+        e.add_field(name='\u200b', value='\u200b')  # Create a blank line
         e.add_field(name='\u200b', value='\u200b')  # Create a blank line
 
         e.add_field(name='About hashBIT',
