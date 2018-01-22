@@ -5,10 +5,11 @@
 ## by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml   ##
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
-version = "1.0"
+version = "1.0.1"
 
-import discord, os, requests, datetime, requests_cache, time, asyncio, schedule
+import discord, os, requests, datetime, requests_cache, time, asyncio, schedule, matplotlib
 from discord.ext import commands
+matplotlib.use('Agg') # Stops matplotlib from trying to use a xwindows backend
 import matplotlib.pyplot as plt
 import pandas as pd
 #from PIL import Image
@@ -286,17 +287,16 @@ def saveGraphImage(coin: str):
         plt.ylabel("Closing Price", fontsize=14)
         plt.tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=[0, 0.03, 1, 0.95])
         plt.grid(True)
-        plt.rcParams['font.family'] = 'serif'
-        plt.rcParams['font.serif'] = 'Ubuntu'
 
         # Save the Image to the server and return it to the user
         fileName = "{}_graph".format(coin)
         dir = os.path.dirname(os.path.abspath(__file__))
         plt.savefig('{}/temp/{}.png'.format(dir, fileName), dpi=80)
+        os.chmod('{}/temp/{}.png'.format(dir, fileName), 0o777) 
         return "success"
 
-    except Exception:
-        return "fail"
+    except Exception as e:
+    	return e
 
 
 # Show graph of the previous 7 days.
@@ -313,16 +313,20 @@ async def graph(ctx, coin: str):
                 if getGraph == "success":
                     await bot.send_file(ctx.message.channel, "{}/temp/{}_graph.png".format(dir, coin))
                 else:
-                    raise IOError
+                    raise Exception(getGraph)
 
             # If the bot couldn't get or create the image for some reason...
-            except IOError as e:
-                await bot.say("There has been an error: ", e)
+            except Exception as e:
+                await bot.say("There has been an error. :(")
+                print ("Graph image error: {}".format(e))
+                
+                # If self hosting, feel free to uncomment the following block
+                # so you will get notified via PM if something is wrong with the graph system:
+
                 #await bot.send_message(ctx.message.channel,"There was an error with getting the graph image, this is a server configuration issue and the server owner has been notified.")
-                # Message the server owner
-                # await bot.send_message(ctx.message.server.owner, "Hey! There has been an error with a request for a {} graph image from a user of your server. Please be sure to check the `temp` directory exists in the script root and is readable and writable to the user running the bot script. The error is as follows: ***{}*".format(coin, e))
-                # await wbot.send_message(ctx.message.server.owner, "The script automatically generates and downloads images from the temp folder if an image for the chosen coin does not already exist, it then keeps it for 12 hours before removing it from the server.")
-                # await bot.send_message(ctx.message.server.owner, "If you are having trouble, feel free to ask for help over on https://github.com/fuzzymannerz/hashBIT or message Discord user **fuzzy#8620**")
+                #await bot.send_message(ctx.message.server.owner, "Hey! There has been an error with a request for a {} graph image from a user of your server. Please be sure to check the `temp` directory exists in the script root and is readable and writable to the user running the bot script. The error is as follows: ***{}*".format(coin, e))
+                #await wbot.send_message(ctx.message.server.owner, "The script automatically generates and downloads images from the temp folder if an image for the chosen coin does not already exist, it then keeps it for 12 hours before removing it from the server.")
+                #await bot.send_message(ctx.message.server.owner, "If you are having trouble, feel free to ask for help over on https://github.com/fuzzymannerz/hashBIT or message Discord user **fuzzy#8620**")
 
     except Exception as e:
         await rateError()
