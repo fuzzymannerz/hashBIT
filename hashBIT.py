@@ -24,7 +24,7 @@ requests_cache.clear()
 
 # Set the bot description and prefix
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
-cmdPrefix = '-'  # Set the prefix for commands. Default is "#" - hence the name.
+cmdPrefix = '#'  # Set the prefix for commands. Default is "#" - hence the name.
 
 bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
@@ -394,4 +394,4 @@ async def rate_handler(ctx, error):
 bot.loop.create_task(graphImageCleaner())
 
 # Run the bot using token from Discord developer app page
-bot.run('YOUR-APP-TOKEN-HERE)
+bot.run('YOUR-APP-TOKEN-HERE')
