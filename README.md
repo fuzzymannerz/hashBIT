@@ -11,7 +11,8 @@ A cryptocurrency rate Discord bot.
 ## Commands
 The following commands are currently available:    
 
-Show rate of a coin: `#bit rate [coin abbreviation]` eg. `#bit rate btc` or `#bit rate eth`    
+Show rate of a coin: `#bit rate [btc|eth|ltc|xrp etc...]` eg. `#bit rate btc` or `#bit rate eth`    
+Show a graph of closing prices: `#bit graph [btc|eth|ltc|xrp etc...]` eg. `#bit graph btc` or `#bit graph eth`    
 Show the help text: `#bit help`    
 Show bot invite URL: `#bit invite`    
 View information about the bot: `#bit info`    
@@ -24,12 +25,19 @@ View information about the bot: `#bit info`
 - Python >= 3.4
 - discord.py library [(https://github.com/Rapptz/discord.py)](https://github.com/Rapptz/discord.py)
 - requests library [(http://python-requests.org)](http://python-requests.org)
+- requests_cache library [(https://pypi.python.org/pypi/requests-cache)](https://pypi.python.org/pypi/requests-cache)
+- madplotlib library [(https://matplotlib.org/)](https://matplotlib.org/)
+- pandas library [(https://pandas.pydata.org/)](https://pandas.pydata.org/)
+- schedule library [(https://pypi.python.org/pypi/schedule)](https://pypi.python.org/pypi/schedule)
 - A Discord app & token
+
+Note: Most of the required libraries can be instaled with `pip`. (`python3-pip` package)
 
 ### Usage
 1. Register an app on the Discord developer page. [https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me)
 2. Make the app into a user and copy the token into the end of the code.
-3. Save and run it
+3. Create a folder named `temp` in the directory containing the `hashBIT.py` script and give it read and write permissions for the user that runs the script.
+4. Save and run it
 
 On Linux you can run the following to open the script as a background process:
 ```
