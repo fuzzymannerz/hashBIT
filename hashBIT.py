@@ -5,16 +5,18 @@
 ## by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml   ##
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
-version = "1.0.1"
+version = "1.0.2"
 
 import discord, os, requests, datetime, requests_cache, time, asyncio, schedule, matplotlib
 from discord.ext import commands
-matplotlib.use('Agg') # Stops matplotlib from trying to use a xwindows backend
+
+matplotlib.use('Agg')  # Stops matplotlib from trying to use a xwindows backend
 import matplotlib.pyplot as plt
 import pandas as pd
-#from PIL import Image
-#import numpy as np
-#from io import BytesIO
+
+# from PIL import Image
+# import numpy as np
+# from io import BytesIO
 
 # Enable caching for the API (Default is 5 minutes)
 requests_cache.install_cache('coinRateCache', expire_after=300)
@@ -22,7 +24,7 @@ requests_cache.clear()
 
 # Set the bot description and prefix
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
-cmdPrefix = '#'  # Set the prefix for commands. Default is "#" - hence the name.
+cmdPrefix = '-'  # Set the prefix for commands. Default is "#" - hence the name.
 
 bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
@@ -95,6 +97,7 @@ async def bit(cmd):
 
         await bot.say(embed=e)
 
+
 # Info command
 @bit.command(pass_context=True)
 async def info(ctx):
@@ -143,7 +146,8 @@ async def help():
         e.set_thumbnail(url=profileImage)
 
         e.add_field(name='Get a coin rate', value='```{}bit rate [btc|eth|ltc|xrp etc...]```'.format(cmdPrefix))
-        e.add_field(name='Show a graph of the previous week', value='```{}bit graph [btc|eth|ltc|xrp etc...]```'.format(cmdPrefix))
+        e.add_field(name='Show a graph of the previous week',
+                    value='```{}bit graph [btc|eth|ltc|xrp etc...]```'.format(cmdPrefix))
         e.add_field(name='Show the help text', value='```{}bit help```'.format(cmdPrefix), inline=False)
         e.add_field(name='Show bot invite URL', value='```{}bit invite```'.format(cmdPrefix), inline=False)
         e.add_field(name='View bot information', value='```{}bit info```'.format(cmdPrefix), inline=False)
@@ -275,30 +279,33 @@ def saveGraphImage(coin: str):
         # coinImage = Image.open(BytesIO(response.content))
 
         # Graph settings
-        coinHistoryEUR = dailyPrice('{}'.format(coin), 'EUR')
-        coinHistoryGBP = dailyPrice('{}'.format(coin), 'GBP')
-        coinHistoryUSD = dailyPrice('{}'.format(coin), 'USD')
+        coinHistoryEUR = dailyPrice(coin, 'EUR')
+        coinHistoryGBP = dailyPrice(coin, 'GBP')
+        coinHistoryUSD = dailyPrice(coin, 'USD')
+
+        plt.clf() # Reset plt
 
         plt.suptitle("{} 7 Day History".format(coinName), fontsize=15, ha='center')
-        plt.plot(coinHistoryEUR.timestamp, coinHistoryEUR.close, label='Euros')
-        plt.plot(coinHistoryGBP.timestamp, coinHistoryGBP.close, label='Pound Sterling')
-        plt.plot(coinHistoryUSD.timestamp, coinHistoryUSD.close, label='US Dollars')
-        plt.legend()
-
         plt.xticks(rotation=45)
         plt.ylabel("Closing Price", fontsize=14)
         plt.tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=[0, 0.03, 1, 0.95])
         plt.grid(True)
 
+        # Plot the values
+        plt.plot(coinHistoryEUR.timestamp, coinHistoryEUR.close, label='Euros')
+        plt.plot(coinHistoryGBP.timestamp, coinHistoryGBP.close, label='Pound Sterling')
+        plt.plot(coinHistoryUSD.timestamp, coinHistoryUSD.close, label='US Dollars')
+        plt.legend()
+
         # Save the Image to the server and return it to the user
         fileName = "{}_graph".format(coin)
         dir = os.path.dirname(os.path.abspath(__file__))
         plt.savefig('{}/temp/{}.png'.format(dir, fileName), dpi=80)
-        os.chmod('{}/temp/{}.png'.format(dir, fileName), 0o777) 
-        return "success"
+        os.chmod('{}/temp/{}.png'.format(dir, fileName), 0o777)
+        return 1
 
     except Exception as e:
-    	return e
+        return e
 
 
 # Show graph of the previous 7 days.
@@ -312,7 +319,7 @@ async def graph(ctx, coin: str):
         else:  # If image isn't already there download it for the chosen coin
             try:
                 getGraph = saveGraphImage(coin)
-                if getGraph == "success":
+                if getGraph:
                     await bot.send_file(ctx.message.channel, "{}/temp/{}_graph.png".format(dir, coin))
                 else:
                     raise Exception(getGraph)
@@ -320,15 +327,15 @@ async def graph(ctx, coin: str):
             # If the bot couldn't get or create the image for some reason...
             except Exception as e:
                 await bot.say("There has been an error. :(")
-                print ("Graph image error: {}".format(e))
-                
+                print("Graph image error: {}".format(e))
+
                 # If self hosting, feel free to uncomment the following block
                 # so you will get notified via PM if something is wrong with the graph system:
 
-                #await bot.send_message(ctx.message.channel,"There was an error with getting the graph image, this is a server configuration issue and the server owner has been notified.")
-                #await bot.send_message(ctx.message.server.owner, "Hey! There has been an error with a request for a {} graph image from a user of your server. Please be sure to check the `temp` directory exists in the script root and is readable and writable to the user running the bot script. The error is as follows: ***{}*".format(coin, e))
-                #await wbot.send_message(ctx.message.server.owner, "The script automatically generates and downloads images from the temp folder if an image for the chosen coin does not already exist, it then keeps it for 12 hours before removing it from the server.")
-                #await bot.send_message(ctx.message.server.owner, "If you are having trouble, feel free to ask for help over on https://github.com/fuzzymannerz/hashBIT or message Discord user **fuzzy#8620**")
+                # await bot.send_message(ctx.message.channel,"There was an error with getting the graph image, this is a server configuration issue and the server owner has been notified.")
+                # await bot.send_message(ctx.message.server.owner, "Hey! There has been an error with a request for a {} graph image from a user of your server. Please be sure to check the `temp` directory exists in the script root and is readable and writable to the user running the bot script. The error is as follows: ***{}*".format(coin, e))
+                # await wbot.send_message(ctx.message.server.owner, "The script automatically generates and downloads images from the temp folder if an image for the chosen coin does not already exist, it then keeps it for 12 hours before removing it from the server.")
+                # await bot.send_message(ctx.message.server.owner, "If you are having trouble, feel free to ask for help over on https://github.com/fuzzymannerz/hashBIT or message Discord user **fuzzy#8620**")
 
     except Exception as e:
         await rateError()
