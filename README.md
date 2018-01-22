@@ -36,6 +36,13 @@ On Linux you can run the following to open the script as a background process:
 pnohup python3 hashBIT.py &
 disown
 ```
+Or you can use screen:
+```
+sudo apt install screen
+screen -S hashbit
+python3 hashBIT.py
+```
+
 ----------
 *Rate data provided by [cryptocompare.com](https://cryptocompare.com)*
 
