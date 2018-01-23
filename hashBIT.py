@@ -5,7 +5,7 @@
 ## by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml   ##
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
-version = "1.1.2"
+version = "1.1.3"
 
 import discord, os, requests, datetime, requests_cache, time, asyncio, schedule, matplotlib
 from discord.ext import commands
@@ -24,7 +24,7 @@ requests_cache.clear()
 
 # Set the bot description and prefix
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
-cmdPrefix = '-'  # Set the prefix for commands. Default is "#" - hence the name.
+cmdPrefix = '#'  # Set the prefix for commands. Default is "#" - hence the name.
 
 bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
@@ -283,6 +283,7 @@ async def graphImageCleaner():
         await scheduleTimer()
         await asyncio.sleep(1)
 
+
 # Method to generate, download and store a coin graph image
 def saveGraphImage(coin: str):
     try:
@@ -303,30 +304,39 @@ def saveGraphImage(coin: str):
         coinHistoryGBP = dailyPrice(coin, 'GBP')
         coinHistoryUSD = dailyPrice(coin, 'USD')
 
-        plt.clf() # Reset plt
+        fig, ax = plt.subplots()
 
+        # Set some visual things
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.get_xaxis().tick_bottom()
+        ax.get_yaxis().tick_left()
+
+        # Set titles and labels
         plt.suptitle("{} 7 Day History".format(coinName), fontsize=15, ha='center')
         plt.xticks(rotation=45)
         plt.ylabel("Closing Price", fontsize=14)
         plt.grid(True)
 
         # Plot the values
-        plt.plot(coinHistoryEUR.timestamp, coinHistoryEUR.close, label='Euros')
-        plt.plot(coinHistoryGBP.timestamp, coinHistoryGBP.close, label='Pound Sterling')
-        plt.plot(coinHistoryUSD.timestamp, coinHistoryUSD.close, label='US Dollars')
-        plt.legend()
+        ax.plot(coinHistoryEUR.timestamp, coinHistoryEUR.close, label='Euros')
+        ax.plot(coinHistoryGBP.timestamp, coinHistoryGBP.close, label='Pound Sterling')
+        ax.plot(coinHistoryUSD.timestamp, coinHistoryUSD.close, label='US Dollars')
+        ax.legend()
 
-        plt.tight_layout(pad=1, h_pad=0, w_pad=0, rect=[0, 0, 1, 0.95])
+        # Set the layout
+        fig.tight_layout(pad=1, h_pad=0, w_pad=0, rect=[0, 0, 1, 0.95])
 
         # Save the Image to the server and return it to the user
         fileName = "{}_graph".format(coin)
         dir = os.path.dirname(os.path.abspath(__file__))
-        plt.savefig('{}/temp/{}.png'.format(dir, fileName), dpi=80)
+        fig.savefig('{}/temp/{}.png'.format(dir, fileName), dpi=80)
         os.chmod('{}/temp/{}.png'.format(dir, fileName), 0o777)
         return 1
 
     except Exception as e:
         return e
+
 
 # Show graph of the previous 7 days.
 @bit.command(pass_context=True)
@@ -354,7 +364,7 @@ async def graph(ctx, coin: str):
 
                 # await bot.send_message(ctx.message.channel,"There was an error with getting the graph image, this is a server configuration issue and the server owner has been notified.")
                 # await bot.send_message(ctx.message.server.owner, "Hey! There has been an error with a request for a {} graph image from a user of your server. Please be sure to check the `temp` directory exists in the script root and is readable and writable to the user running the bot script. The error is as follows: ***{}*".format(coin, e))
-                # await wbot.send_message(ctx.message.server.owner, "The script automatically generates and downloads images from the temp folder if an image for the chosen coin does not already exist, it then keeps it for 12 hours before removing it from the server.")
+                # await bot.send_message(ctx.message.server.owner, "The script automatically generates and downloads images from the temp folder if an image for the chosen coin does not already exist, it then keeps it for 12 hours before removing it from the server.")
                 # await bot.send_message(ctx.message.server.owner, "If you are having trouble, feel free to ask for help over on https://github.com/fuzzymannerz/hashBIT or message Discord user **fuzzy#8620**")
 
     except Exception as e:
