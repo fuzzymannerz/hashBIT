@@ -14,7 +14,7 @@ The following commands are currently available:
 Show rate of a coin: `#bit rate [btc|eth|ltc|xrp etc...]` eg. `#bit rate btc` or `#bit rate eth`    
 Show a graph of closing prices: `#bit graph [btc|eth|ltc|xrp etc...]` eg. `#bit graph btc` or `#bit graph eth`    
 Show the help text: `#bit help`    
-Show bot invite URL: `#bit invite`
+Show bot invite URL: `#bit invite`    
 Clean previous hashBIT messages: `#bit clean`  
 View information about the bot: `#bit info`    
 
