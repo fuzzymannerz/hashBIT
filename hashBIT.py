@@ -5,7 +5,7 @@
 ## by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml   ##
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
-version = "1.1.0"
+version = "1.1.1"
 
 import discord, os, requests, datetime, requests_cache, time, asyncio, schedule, matplotlib
 from discord.ext import commands
@@ -282,7 +282,6 @@ async def graphImageCleaner():
         await scheduleTimer()
         await asyncio.sleep(1)
 
-
 # Method to generate, download and store a coin graph image
 def saveGraphImage(coin: str):
     try:
@@ -308,7 +307,6 @@ def saveGraphImage(coin: str):
         plt.suptitle("{} 7 Day History".format(coinName), fontsize=15, ha='center')
         plt.xticks(rotation=45)
         plt.ylabel("Closing Price", fontsize=14)
-        plt.tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=[0, 0.03, 1, 0.95])
         plt.grid(True)
 
         # Plot the values
@@ -316,6 +314,8 @@ def saveGraphImage(coin: str):
         plt.plot(coinHistoryGBP.timestamp, coinHistoryGBP.close, label='Pound Sterling')
         plt.plot(coinHistoryUSD.timestamp, coinHistoryUSD.close, label='US Dollars')
         plt.legend()
+
+        plt.tight_layout(pad=1, h_pad=0, w_pad=0, rect=[0, 0, 1, 0.95])
 
         # Save the Image to the server and return it to the user
         fileName = "{}_graph".format(coin)
@@ -326,7 +326,6 @@ def saveGraphImage(coin: str):
 
     except Exception as e:
         return e
-
 
 # Show graph of the previous 7 days.
 @bit.command(pass_context=True)
