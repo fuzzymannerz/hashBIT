@@ -5,7 +5,7 @@
 ## by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml   ##
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
-version = "1.0.2"
+version = "1.1.0"
 
 import discord, os, requests, datetime, requests_cache, time, asyncio, schedule, matplotlib
 from discord.ext import commands
@@ -24,7 +24,7 @@ requests_cache.clear()
 
 # Set the bot description and prefix
 description = '''Returns cryptocurrency rates in EUR, GBP & USD.'''
-cmdPrefix = '#'  # Set the prefix for commands. Default is "#" - hence the name.
+cmdPrefix = '-'  # Set the prefix for commands. Default is "#" - hence the name.
 
 bot = commands.Bot(command_prefix=cmdPrefix, description=description)
 
@@ -40,7 +40,7 @@ githubLink = 'https://github.com/fuzzymannerz/hashBIT'
 profileImage = 'https://raw.githubusercontent.com/fuzzymannerz/hashBIT/master/hashbit_profile.png'
 
 # Set the bot permissions for invite links
-perms = "216129"
+perms = "126016"
 
 # Get the current time
 currentTime = time.strftime("%H:%M", time.gmtime())
@@ -181,6 +181,26 @@ async def invite():
         await bot.say(genericError)
         await bot.say(e)
         return
+
+
+# Clean Command
+@bit.command(pass_context=True, no_pm=True)
+async def clean(ctx):
+
+    channel = ctx.message.channel
+
+    calls = 0
+    async for msg in bot.logs_from(channel, limit=20, before=ctx.message):
+        if calls and calls % 5 == 0:
+            await asyncio.sleep(1.0) # Slow the deletion a little to prevent any issues
+
+        if msg.author == bot.user:
+            await bot.delete_message(msg)
+            calls += 1
+    if calls == 1:
+        await bot.say(':white_check_mark: **{} hashBIT Messages cleared.**️'.format(calls))
+    else:
+        await bot.say(':white_check_mark: **{} hashBIT Messages cleared.**️'.format(calls))
 
 
 # Get coin information
@@ -392,6 +412,7 @@ async def rate_handler(ctx, error):
 
 # Run the graph image cleaner in the background
 bot.loop.create_task(graphImageCleaner())
+
 
 # Run the bot using token from Discord developer app page
 bot.run('YOUR-APP-TOKEN-HERE')
