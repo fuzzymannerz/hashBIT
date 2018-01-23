@@ -5,7 +5,7 @@
 ## by Fuzzy Mannerz (fuzzy#8620) - 2018 | fuzzytek.ml   ##
 ## https://github.com/fuzzymannerz/hashBIT              ##
 ##########################################################
-version = "1.1.1"
+version = "1.1.2"
 
 import discord, os, requests, datetime, requests_cache, time, asyncio, schedule, matplotlib
 from discord.ext import commands
@@ -150,6 +150,7 @@ async def help():
                     value='```{}bit graph [btc|eth|ltc|xrp etc...]```'.format(cmdPrefix))
         e.add_field(name='Show the help text', value='```{}bit help```'.format(cmdPrefix), inline=False)
         e.add_field(name='Show bot invite URL', value='```{}bit invite```'.format(cmdPrefix), inline=False)
+        e.add_field(name='Clean previous hashBIT messages', value='```{}bit clean```'.format(cmdPrefix), inline=False)
         e.add_field(name='View bot information', value='```{}bit info```'.format(cmdPrefix), inline=False)
 
         await bot.say(embed=e)
@@ -198,7 +199,7 @@ async def clean(ctx):
             await bot.delete_message(msg)
             calls += 1
     if calls == 1:
-        await bot.say(':white_check_mark: **{} hashBIT Messages cleared.**️'.format(calls))
+        await bot.say(':white_check_mark: **{} hashBIT Message cleared.**️'.format(calls))
     else:
         await bot.say(':white_check_mark: **{} hashBIT Messages cleared.**️'.format(calls))
 
